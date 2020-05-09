@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  app:
+    container_name: task-manager-api
+    image: task-manager-api
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - dbpostgresql
+  dbpostgresql:
+    container_name: task-manager-postgresql
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=p0stgr3sql
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=taskmanagerdb
