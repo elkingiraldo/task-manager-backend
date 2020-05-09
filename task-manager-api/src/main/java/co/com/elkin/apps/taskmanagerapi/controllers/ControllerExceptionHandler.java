@@ -1,6 +1,7 @@
 package co.com.elkin.apps.taskmanagerapi.controllers;
 
 import java.util.Locale;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,9 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 	private static final String LOCALE_HEADER_NAME = "locale";
 
+	private static final Function<String, String> ERROR_MESSAGE = msg -> "Task Manager API service -> exception occurred"
+			+ msg;
+
 	@Value("${spring.application.name}")
 	private static String applicationName;
 
@@ -40,7 +44,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(value = { Exception.class })
 	protected ResponseEntity<ServiceExceptionWrapper> handleUnknownException(final Exception ex,
 			final WebRequest request) {
-		LOGGER.error("Task Manager API service -> exception occurred " + ex.getMessage(), ex);
+		LOGGER.error(ERROR_MESSAGE.apply(ex.getMessage()), ex);
 		ex.printStackTrace();
 
 		final String code = APIServiceErrorCodes.GENERAL_EXCEPTION.getMessage();
@@ -55,9 +59,9 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(value = { APIServiceException.class })
-	protected ResponseEntity<ServiceExceptionWrapper> handleReportServiceException(final APIServiceException ex,
+	protected ResponseEntity<ServiceExceptionWrapper> handleAPIServiceException(final APIServiceException ex,
 			final WebRequest request) {
-		logger.error("Task Manager Service -> managed exception occurred " + ex.getMessage(), ex);
+		LOGGER.error(ERROR_MESSAGE.apply(ex.getMessage()), ex);
 		ex.printStackTrace();
 
 		final Locale locale = getLocale(request);
