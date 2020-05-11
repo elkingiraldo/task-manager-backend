@@ -6,4 +6,6 @@ import co.com.elkin.apps.taskmanagerapi.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+	User findByUserName(String username);
+
 }

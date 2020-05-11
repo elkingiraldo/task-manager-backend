@@ -6,7 +6,10 @@ public enum APIServiceErrorCodes implements IAPIServiceErrorMsg {
 
 	GENERAL_EXCEPTION("general.exception", HttpStatus.INTERNAL_SERVER_ERROR),
 	GENERAL_DTO_CANT_BE_NULL_EXCEPTION("general.dto.cant.be.null.exception", HttpStatus.BAD_REQUEST),
-	GENERAL_ATTRIBUTE_REQUIRED_EXCEPTION("general.attribute.required.exception", HttpStatus.BAD_REQUEST);
+	GENERAL_ATTRIBUTE_REQUIRED_EXCEPTION("general.attribute.required.exception", HttpStatus.BAD_REQUEST),
+	
+	SECURITY_USER_DISABLED_EXCEPTION("security.user.disabled.exception", HttpStatus.UNAUTHORIZED),
+	SECURITY_INVALID_CREDENTIALS_EXCEPTION("security.invalid.credentials.exception", HttpStatus.UNAUTHORIZED);
 
 	private String message;
 	private HttpStatus httpStatus;
