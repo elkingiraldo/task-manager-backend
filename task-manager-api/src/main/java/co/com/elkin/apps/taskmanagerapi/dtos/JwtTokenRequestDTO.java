@@ -2,11 +2,15 @@ package co.com.elkin.apps.taskmanagerapi.dtos;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 public class JwtTokenRequestDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@NotNull
 	private String username;
+	@NotNull
 	private String password;
 
 	public JwtTokenRequestDTO() {
