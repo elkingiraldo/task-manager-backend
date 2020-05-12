@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import co.com.elkin.apps.taskmanagerapi.dtos.JwtUserDetailsDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
@@ -92,9 +91,8 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	public Boolean validateToken(final String token, final UserDetails userDetails) {
-		final JwtUserDetailsDTO user = (JwtUserDetailsDTO) userDetails;
 		final String username = getUsernameFromToken(token);
-		return (username.equals(user.getUsername()) && !isTokenExpired(token));
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
 
 	private Date calculateExpirationDate(final Date createdDate) {
