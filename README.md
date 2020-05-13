@@ -2,10 +2,10 @@
 Backend implementation for Task Manager app
 
 # Compiling
-This is a Maven project and for compiling it you need to go into root path project (task-manager-api) and run the following command:
+This is a Maven project and for compiling it you should do it with the Maven wrapper provided going into project root path (task-manager-api) and running the following command:
 
 ```
-$ mvn clean install
+$ ./mvnw clean install
 ```
 
 # Deploying
