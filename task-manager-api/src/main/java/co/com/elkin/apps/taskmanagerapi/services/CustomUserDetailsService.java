@@ -12,6 +12,12 @@ import org.springframework.stereotype.Service;
 import co.com.elkin.apps.taskmanagerapi.entities.User;
 import co.com.elkin.apps.taskmanagerapi.repositories.UserRepository;
 
+/**
+ * Custom User details for validating users in DB
+ * 
+ * @author egiraldo
+ *
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

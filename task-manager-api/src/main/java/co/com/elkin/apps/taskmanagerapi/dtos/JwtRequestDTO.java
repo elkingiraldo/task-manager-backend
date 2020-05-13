@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
-public class JwtTokenRequestDTO implements Serializable {
+public class JwtRequestDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -13,11 +13,11 @@ public class JwtTokenRequestDTO implements Serializable {
 	@NotNull
 	private String password;
 
-	public JwtTokenRequestDTO() {
+	public JwtRequestDTO() {
 		super();
 	}
 
-	public JwtTokenRequestDTO(final String username, final String password) {
+	public JwtRequestDTO(final String username, final String password) {
 		this.setUsername(username);
 		this.setPassword(password);
 	}
@@ -36,6 +36,11 @@ public class JwtTokenRequestDTO implements Serializable {
 
 	public void setPassword(final String password) {
 		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "JwtTokenRequestDTO [username=" + username + ", password=" + password + "]";
 	}
 
 }

@@ -17,19 +17,25 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import co.com.elkin.apps.taskmanagerapi.security.JwtTokenAuthorizationOncePerRequestFilter;
+import co.com.elkin.apps.taskmanagerapi.security.JwtAuthorizationOncePerRequestFilter;
 import co.com.elkin.apps.taskmanagerapi.security.JwtUnAuthorizedResponseAuthenticationEntryPoint;
 import co.com.elkin.apps.taskmanagerapi.services.CustomUserDetailsService;
 
+/**
+ * Configuration required for JWT authentication
+ * 
+ * @author egiraldo
+ *
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
+public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
 	@Autowired
-	private JwtTokenAuthorizationOncePerRequestFilter jwtAuthenticationTokenFilter;
+	private JwtAuthorizationOncePerRequestFilter jwtAuthenticationTokenFilter;
 	@Autowired
 	private JwtUnAuthorizedResponseAuthenticationEntryPoint jwtUnAuthorizedResponseAuthenticationEntryPoint;
 

@@ -74,4 +74,10 @@ public class JwtUserDetailsDTO implements UserDetails {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "JwtUserDetailsDTO [id=" + id + ", username=" + username + ", password=" + password + ", authorities="
+				+ authorities + "]";
+	}
+
 }

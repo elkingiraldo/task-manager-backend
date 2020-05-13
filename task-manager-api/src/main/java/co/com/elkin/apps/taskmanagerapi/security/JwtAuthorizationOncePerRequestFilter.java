@@ -1,6 +1,7 @@
 package co.com.elkin.apps.taskmanagerapi.security;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -21,16 +22,22 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
+/**
+ * Filter for JWT
+ * 
+ * @author egiraldo
+ *
+ */
 @Component
-public class JwtTokenAuthorizationOncePerRequestFilter extends OncePerRequestFilter {
+public class JwtAuthorizationOncePerRequestFilter extends OncePerRequestFilter {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthorizationOncePerRequestFilter.class);
 
 	@Autowired
 	private UserDetailsService jwtInMemoryUserDetailsService;
 
 	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
+	private JwtUtil jwtTokenUtil;
 
 	@Value("${jwt.http.request.header}")
 	private String tokenHeader;
@@ -38,7 +45,11 @@ public class JwtTokenAuthorizationOncePerRequestFilter extends OncePerRequestFil
 	@Override
 	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
 			final FilterChain chain) throws ServletException, IOException {
-		LOGGER.debug("Authentication Request For '{}'", request.getRequestURL());
+
+		final String requestId = UUID.randomUUID().toString();
+		LOGGER.debug(
+				"[JwtTokenAuthorizationOncePerRequestFilter][doFilterInternal]['{}'] Started. Authentication Request For '{}'",
+				requestId, request.getRequestURL());
 
 		final String requestTokenHeader = request.getHeader(this.tokenHeader);
 
@@ -62,7 +73,7 @@ public class JwtTokenAuthorizationOncePerRequestFilter extends OncePerRequestFil
 
 			final UserDetails userDetails = this.jwtInMemoryUserDetailsService.loadUserByUsername(username);
 
-			if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
+			if (jwtTokenUtil.validateToken(jwtToken, userDetails, requestId)) {
 				final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				usernamePasswordAuthenticationToken
