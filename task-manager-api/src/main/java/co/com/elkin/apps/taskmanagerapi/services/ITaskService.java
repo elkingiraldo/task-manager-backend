@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import co.com.elkin.apps.taskmanagerapi.dtos.TaskDTO;
+import co.com.elkin.apps.taskmanagerapi.exception.APIServiceException;
 
 /**
  * Interface in charge of handling all task requests
@@ -23,5 +24,8 @@ public interface ITaskService {
 	 * @return {@link TaskDTO} a list of DTO found
 	 */
 	public List<TaskDTO> retrieveTasks(final HttpServletRequest request, final String requestId);
+
+	public TaskDTO createTask(final HttpServletRequest request, final TaskDTO task, final String requestId)
+			throws APIServiceException;
 
 }

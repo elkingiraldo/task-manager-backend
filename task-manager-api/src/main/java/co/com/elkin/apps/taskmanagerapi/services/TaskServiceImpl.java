@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import co.com.elkin.apps.taskmanagerapi.dtos.TaskDTO;
+import co.com.elkin.apps.taskmanagerapi.entities.Task;
+import co.com.elkin.apps.taskmanagerapi.exception.APIServiceException;
 import co.com.elkin.apps.taskmanagerapi.repositories.TaskRepository;
 import co.com.elkin.apps.taskmanagerapi.security.JwtUtil;
 import co.com.elkin.apps.taskmanagerapi.services.converters.TaskConverterService;
+import co.com.elkin.apps.taskmanagerapi.services.validations.TaskValidationService;
 
 /**
  * Service implementation for handling all task services
@@ -31,6 +34,8 @@ public class TaskServiceImpl implements ITaskService {
 	private TaskRepository taskRepository;
 	@Autowired
 	private TaskConverterService taskConverterService;
+	@Autowired
+	private TaskValidationService taskValidationService;
 
 	@Override
 	public List<TaskDTO> retrieveTasks(final HttpServletRequest request, final String requestId) {
@@ -43,6 +48,26 @@ public class TaskServiceImpl implements ITaskService {
 
 		LOGGER.info("[TaskServiceImpl][retrieveTasks][" + requestId + "] Finished.");
 		return taskList;
+	}
+
+	@Override
+	public TaskDTO createTask(final HttpServletRequest request, final TaskDTO task, final String requestId)
+			throws APIServiceException {
+
+		LOGGER.info("[TaskServiceImpl][createTask][" + requestId + "] Started.");
+
+		taskValidationService.validateCreation(task, requestId);
+
+		final Integer userIdFromHeader = jwtUtil.getUserIdFromHeader(request, requestId);
+		taskValidationService.autocompleteCreation(task, userIdFromHeader, requestId);
+
+		final Task savedTaks = taskRepository.save(taskConverterService.toEntity(task, requestId));
+
+		final TaskDTO taskDto = taskConverterService.toDTO(savedTaks);
+
+		LOGGER.info(
+				"[TaskServiceImpl][createTask][" + requestId + "] Finished. Task created ID [" + taskDto.getId() + "]");
+		return taskDto;
 	}
 
 }

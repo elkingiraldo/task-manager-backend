@@ -3,6 +3,8 @@ package co.com.elkin.apps.taskmanagerapi.dtos;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 import co.com.elkin.apps.taskmanagerapi.enums.TaskStatus;
 
 public class TaskDTO implements Serializable {
@@ -10,7 +12,10 @@ public class TaskDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
+
+	@NotNull
 	private String description;
+	@NotNull
 	private Date edc;
 	private Integer userId;
 	private TaskStatus status;
