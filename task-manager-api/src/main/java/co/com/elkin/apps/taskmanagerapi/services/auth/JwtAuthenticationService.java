@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -33,9 +32,6 @@ public class JwtAuthenticationService {
 	@Autowired
 	private JwtUtil jwtTokenUtil;
 
-	@Value("${jwt.http.request.header}")
-	private String tokenHeader;
-
 	/**
 	 * This method authenticates and creating new JWT for a specific user
 	 * 
@@ -44,8 +40,8 @@ public class JwtAuthenticationService {
 	 * @return the JWT generated
 	 * @throws APIServiceException if any authentication validation fails
 	 */
-	public String createAuthenticationToken(@Valid final JwtRequestDTO authenticationRequest,
-			final String requestId) throws APIServiceException {
+	public String createAuthenticationToken(@Valid final JwtRequestDTO authenticationRequest, final String requestId)
+			throws APIServiceException {
 
 		LOGGER.info("[JwtAuthenticationService][createAuthenticationToken][" + requestId + "] Started.");
 
@@ -70,8 +66,7 @@ public class JwtAuthenticationService {
 
 		LOGGER.info("[JwtAuthenticationService][refreshAndGetAuthenticationToken][" + requestId + "] Started.");
 
-		final String authToken = request.getHeader(tokenHeader);
-		final String token = authToken.substring(7);
+		final String token = jwtTokenUtil.getTokenFromHeader(request, requestId);
 		final String username = jwtTokenUtil.getUsernameFromToken(token);
 		userDetailsService.loadUserByUsername(username);
 

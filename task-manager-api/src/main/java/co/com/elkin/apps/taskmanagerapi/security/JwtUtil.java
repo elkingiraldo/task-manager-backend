@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +46,9 @@ public class JwtUtil implements Serializable {
 
 	@Value("${jwt.token.expiration.in.seconds}")
 	private Long expiration;
+
+	@Value("${jwt.http.request.header}")
+	private String tokenHeader;
 
 	public String getUsernameFromToken(final String token) {
 		return getClaimFromToken(token, Claims::getSubject);
@@ -142,6 +147,43 @@ public class JwtUtil implements Serializable {
 		LOGGER.info(
 				"[JwtTokenUtil][validateToken][" + requestId + "] Finished. Is a valid token? [" + validToken + "]");
 		return validToken;
+	}
+
+	/**
+	 * This method extracts Token from header
+	 * 
+	 * @param request,   HTTP request from client
+	 * @param requestId, ID for tracking request
+	 * @return a valid JWT
+	 */
+	public String getTokenFromHeader(final HttpServletRequest request, final String requestId) {
+
+		LOGGER.info("[JwtTokenUtil][getTokenFromHeader][" + requestId + "] Started.");
+
+		final String authToken = request.getHeader(tokenHeader);
+		final String token = authToken.substring(7);
+
+		LOGGER.info("[JwtTokenUtil][getTokenFromHeader][" + requestId + "] Finished and returning JWT [" + token + "]");
+		return token;
+	}
+
+	/**
+	 * This method extracts Username from header
+	 * 
+	 * @param request,   HTTP request from client
+	 * @param requestId, ID for tracking request
+	 * @return the user found into the token
+	 */
+	public String getUsernameFromHeader(final HttpServletRequest request, final String requestId) {
+
+		LOGGER.info("[JwtTokenUtil][getUsernameFromHeader][" + requestId + "] Started.");
+
+		final String tokenFromHeader = getTokenFromHeader(request, requestId);
+		final String usernameFromToken = getUsernameFromToken(tokenFromHeader);
+
+		LOGGER.info("[JwtTokenUtil][getUsernameFromHeader][" + requestId + "] Finished and returning Username ["
+				+ usernameFromToken + "]");
+		return usernameFromToken;
 	}
 
 	/**
