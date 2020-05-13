@@ -12,9 +12,10 @@ CREATE TABLE TASK_TBL (
     status VARCHAR(20) NOT NULL
 );
 
-INSERT INTO USER_TBL (user_name, password)
-VALUES ('elkingiraldo91', 'elkinpassword');
+INSERT INTO USER_TBL (user_name, password) VALUES ('elkingiraldo91', 'elkinpassword');
+INSERT INTO USER_TBL (user_name, password) VALUES ('jairo53', 'jairopwd');
+INSERT INTO USER_TBL (user_name, password) VALUES ('martha58', 'marthapwd');
 
-INSERT INTO TASK_TBL (description, edc, user_id, status)
-VALUES ('I need to do somenthing', DATE '2021-05-16', 1, 'PENDING');
+INSERT INTO TASK_TBL (description, edc, user_id, status) VALUES ('I need to do somenthing', DATE '2021-05-16', 1, 'PENDING');
+INSERT INTO TASK_TBL (description, edc, user_id, status) VALUES ('I need to do somenthing', DATE '2019-05-16', 1, 'DONE');
 
