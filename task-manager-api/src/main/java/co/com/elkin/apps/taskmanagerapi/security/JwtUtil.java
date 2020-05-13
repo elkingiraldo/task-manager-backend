@@ -12,10 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import co.com.elkin.apps.taskmanagerapi.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
@@ -35,11 +37,14 @@ public class JwtUtil implements Serializable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
 
-	// If we want to add claims
+	private static final String CLAIM_KEY_JTI = "jti";
 //	private static final String CLAIM_KEY_USERNAME = "sub";
 //	private static final String CLAIM_KEY_CREATED = "iat";
 
 	private final Clock clock = DefaultClock.INSTANCE;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Value("${jwt.signing.key.secret}")
 	private String secret;
@@ -62,6 +67,10 @@ public class JwtUtil implements Serializable {
 		return getClaimFromToken(token, Claims::getExpiration);
 	}
 
+	public String getUserIdFromToken(final String token) {
+		return getClaimFromToken(token, Claims::getId);
+	}
+
 	public <T> T getClaimFromToken(final String token, final Function<Claims, T> claimsResolver) {
 		final Claims claims = getAllClaimsFromToken(token);
 		return claimsResolver.apply(claims);
@@ -79,6 +88,7 @@ public class JwtUtil implements Serializable {
 		LOGGER.info("[JwtTokenUtil][generateToken][" + requestId + "] Started.");
 
 		final Map<String, Object> claims = new HashMap<>();
+		claims.put(CLAIM_KEY_JTI, userRepository.findByUserName(userDetails.getUsername()).get().getId());
 		final String generatedToken = doGenerateToken(claims, userDetails.getUsername(), requestId);
 
 		LOGGER.info("[JwtTokenUtil][generateToken][" + requestId + "] Finished with token [" + generatedToken + "]");
@@ -184,6 +194,25 @@ public class JwtUtil implements Serializable {
 		LOGGER.info("[JwtTokenUtil][getUsernameFromHeader][" + requestId + "] Finished and returning Username ["
 				+ usernameFromToken + "]");
 		return usernameFromToken;
+	}
+
+	/**
+	 * This method extracts user ID from header
+	 * 
+	 * @param request,   HTTP request from client
+	 * @param requestId, ID for tracking request
+	 * @return the user ID found into the token
+	 */
+	public Integer getUserIdFromHeader(final HttpServletRequest request, final String requestId) {
+
+		LOGGER.info("[JwtTokenUtil][getUserIdFromHeader][" + requestId + "] Started.");
+
+		final String tokenFromHeader = getTokenFromHeader(request, requestId);
+		final String idFromToken = getUserIdFromToken(tokenFromHeader);
+
+		LOGGER.info("[JwtTokenUtil][getUserIdFromHeader][" + requestId + "] Finished and returning User ID ["
+				+ idFromToken + "]");
+		return Integer.parseInt(idFromToken);
 	}
 
 	/**

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import co.com.elkin.apps.taskmanagerapi.dtos.TaskDTO;
-import co.com.elkin.apps.taskmanagerapi.entities.User;
 import co.com.elkin.apps.taskmanagerapi.repositories.TaskRepository;
 import co.com.elkin.apps.taskmanagerapi.security.JwtUtil;
 import co.com.elkin.apps.taskmanagerapi.services.converters.TaskConverterService;
@@ -29,8 +28,6 @@ public class TaskServiceImpl implements ITaskService {
 	@Autowired
 	private JwtUtil jwtUtil;
 	@Autowired
-	private UserServiceImpl userServiceImpl;
-	@Autowired
 	private TaskRepository taskRepository;
 	@Autowired
 	private TaskConverterService taskConverterService;
@@ -40,9 +37,8 @@ public class TaskServiceImpl implements ITaskService {
 
 		LOGGER.info("[TaskServiceImpl][retrieveTasks][" + requestId + "] Started.");
 
-		final String usernameFromHeader = jwtUtil.getUsernameFromHeader(request, requestId);
-		final User user = userServiceImpl.retrieveUserByName(usernameFromHeader);
-		final List<TaskDTO> taskList = taskConverterService.toDtos(taskRepository.findByUserId(user.getId()),
+		final Integer userIdFromHeader = jwtUtil.getUserIdFromHeader(request, requestId);
+		final List<TaskDTO> taskList = taskConverterService.toDtos(taskRepository.findByUserId(userIdFromHeader),
 				requestId);
 
 		LOGGER.info("[TaskServiceImpl][retrieveTasks][" + requestId + "] Finished.");
