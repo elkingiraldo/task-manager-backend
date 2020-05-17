@@ -28,7 +28,7 @@ import co.com.elkin.apps.taskmanagerapi.services.TaskServiceImpl;
  * @author egiraldo
  *
  */
-@CrossOrigin(origins={ "${client.application.baseUrl}" })
+@CrossOrigin(origins={ "${cors.client.origin.baseUrl}" }, allowedHeaders="*")
 @RestController
 @RequestMapping("/v1.0/tasks")
 public class TaskController {

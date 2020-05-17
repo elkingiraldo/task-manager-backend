@@ -26,7 +26,7 @@ import co.com.elkin.apps.taskmanagerapi.services.auth.JwtAuthenticationService;
  * @author egiraldo
  *
  */
-@CrossOrigin(origins={ "${client.application.baseUrl}" })
+@CrossOrigin(origins={ "${cors.client.origin.baseUrl}" }, allowedHeaders = "*")
 @RestController
 public class JwtAuthenticationRestController {
 
