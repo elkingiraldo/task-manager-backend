@@ -27,15 +27,27 @@ public class TaskValidationService extends GeneralValidation {
 		LOGGER.info("[TaskValidationService][validateCreation][" + requestId + "] finished.");
 	}
 
+	public void autocompleteCreation(final TaskDTO task, final Integer userId, final String requestId) {
+		task.setStatus(TaskStatus.PENDING);
+		task.setUserId(userId);
+	}
+
+	public void validateUser(final String username, final String usernameFromHeader, final String requestId)
+			throws APIServiceException {
+		LOGGER.info("[TaskValidationService][validateUser][" + requestId + "] Started.");
+
+		if (!username.equals(usernameFromHeader)) {
+			throw new APIServiceException(username,
+					APIServiceErrorCodes.SECURITY_INVALID_TOKEN_MATCH_USERNAME_EXCEPTION);
+		}
+
+		LOGGER.info("[TaskValidationService][validateUser][" + requestId + "] Finished without errors.");
+	}
+
 	private void validateEdc(final Date edc) throws APIServiceException {
 		if (edc.before(new Date())) {
 			throw new APIServiceException(APIServiceErrorCodes.TASK_EDC_BEFORE_EXCEPTION);
 		}
-	}
-
-	public void autocompleteCreation(final TaskDTO task, final Integer userId, final String requestId) {
-		task.setStatus(TaskStatus.PENDING);
-		task.setUserId(userId);
 	}
 
 }

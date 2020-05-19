@@ -18,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
-import co.com.elkin.apps.taskmanagerapi.controllers.TaskController;
 import co.com.elkin.apps.taskmanagerapi.dtos.TaskDTO;
 import co.com.elkin.apps.taskmanagerapi.exception.APIServiceException;
 import co.com.elkin.apps.taskmanagerapi.services.TaskServiceImpl;
@@ -50,15 +49,15 @@ public class TaskControllerTest {
 	}
 
 	@Test
-	public void onlyOneCallToTaskServiceRetrieveTasks() {
-		taskController.tasks(any(), anyString());
-		verify(taskService, times(1)).retrieveTasks(any(), anyString());
+	public void onlyOneCallToTaskServiceRetrieveTasks() throws APIServiceException {
+		taskController.tasks(any(), anyString(), anyString());
+		verify(taskService, times(1)).retrieveTasks(anyString(), any(), anyString());
 	}
 
 	@Test
-	public void dtoListNotAffectedInTasksMethod() {
-		when(taskService.retrieveTasks(any(), anyString())).thenReturn(dtoList);
-		final ResponseEntity<List<TaskDTO>> allTasks = taskController.tasks(any(), anyString());
+	public void dtoListNotAffectedInTasksMethod() throws APIServiceException {
+		when(taskService.retrieveTasks(anyString(), any(), anyString())).thenReturn(dtoList);
+		final ResponseEntity<List<TaskDTO>> allTasks = taskController.tasks(any(), anyString(), anyString());
 		assertEquals(dtoList.size(), allTasks.getBody().size());
 		assertEquals(dtoList, allTasks.getBody());
 	}

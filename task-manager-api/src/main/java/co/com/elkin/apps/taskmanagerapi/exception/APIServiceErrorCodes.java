@@ -10,6 +10,7 @@ public enum APIServiceErrorCodes implements IAPIServiceErrorMsg {
 	
 	SECURITY_USER_DISABLED_EXCEPTION("security.user.disabled.exception", HttpStatus.UNAUTHORIZED),
 	SECURITY_INVALID_CREDENTIALS_EXCEPTION("security.invalid.credentials.exception", HttpStatus.UNAUTHORIZED),
+	SECURITY_INVALID_TOKEN_MATCH_USERNAME_EXCEPTION("security.invalid.token.match.username.exception", HttpStatus.UNAUTHORIZED),
 	
 	TASK_EDC_BEFORE_EXCEPTION("task.edc.before.exception", HttpStatus.BAD_REQUEST);
 

@@ -29,6 +29,8 @@ import co.com.elkin.apps.taskmanagerapi.services.validations.TaskValidationServi
 
 public class TaskServiceTest {
 
+	private static final String ANY_USER_NAME = "anyusername";
+
 	@InjectMocks
 	private TaskServiceImpl taskService;
 	@Mock
@@ -72,31 +74,36 @@ public class TaskServiceTest {
 
 	@Test
 	public void onlyOneCallToTaskRepositoryTaskConverterAndJwtUtilOnRetrieveTasks() throws APIServiceException {
-		taskService.retrieveTasks(any(), anyString());
+		when(jwtUtil.getUsernameFromHeader(any(), anyString())).thenReturn(ANY_USER_NAME);
+		doNothing().when(taskValidationService).validateUser(anyString(), anyString(), anyString());
+		taskService.retrieveTasks(ANY_USER_NAME, any(), anyString());
+		verify(jwtUtil, times(1)).getUsernameFromHeader(any(), anyString());
+		verify(taskValidationService, times(1)).validateUser(anyString(), anyString(), anyString());
 		verify(jwtUtil, times(1)).getUserIdFromHeader(any(), anyString());
 		verify(taskRepository, times(1)).findByUserId(any());
 		verify(taskConverterService, times(1)).toDtos(any(), anyString());
 	}
 
 	@Test
-	public void shouldReturnAllTasksRelatedToUserId() {
+	public void shouldReturnAllTasksRelatedToUserId() throws APIServiceException {
 		when(taskRepository.findByUserId(any())).thenReturn(taskList);
 		when(taskConverterService.toDtos(any(), anyString())).thenReturn(taskListDto);
-		final List<TaskDTO> result = taskService.retrieveTasks(any(), anyString());
+		final List<TaskDTO> result = taskService.retrieveTasks(ANY_USER_NAME, any(), anyString());
 		assertEquals(taskListDto, result);
 	}
 
 	@Test
 	@Ignore
 	public void shouldCreateTaskSuccessfully() throws APIServiceException {
+		doNothing().when(taskValidationService).validateUser(anyString(), anyString(), anyString());
 		doNothing().when(taskValidationService).validateCreation(any(), anyString());
 		doNothing().when(jwtUtil).getUserIdFromHeader(any(), anyString());
 		doNothing().when(taskValidationService).autocompleteCreation(any(), any(), anyString());
-		
+
 		when(taskConverterService.toEntity(any(), anyString())).thenReturn(any());
 		when(taskRepository.save(any())).thenReturn(any());
 		when(taskConverterService.toDTO(any())).thenReturn(taskDTO01);
-		
+
 		final TaskDTO createdTask = taskService.createTask(any(), any(), anyString());
 		assertEquals(taskDTO01, createdTask);
 	}

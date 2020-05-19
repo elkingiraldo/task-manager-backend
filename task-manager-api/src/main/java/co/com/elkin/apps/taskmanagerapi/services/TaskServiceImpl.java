@@ -38,10 +38,12 @@ public class TaskServiceImpl implements ITaskService {
 	private TaskValidationService taskValidationService;
 
 	@Override
-	public List<TaskDTO> retrieveTasks(final HttpServletRequest request, final String requestId) {
+	public List<TaskDTO> retrieveTasks(final String username, final HttpServletRequest request, final String requestId)
+			throws APIServiceException {
 
 		LOGGER.info("[TaskServiceImpl][retrieveTasks][" + requestId + "] Started.");
 
+		taskValidationService.validateUser(username, jwtUtil.getUsernameFromHeader(request, requestId), requestId);
 		final Integer userIdFromHeader = jwtUtil.getUserIdFromHeader(request, requestId);
 		final List<TaskDTO> taskList = taskConverterService.toDtos(taskRepository.findByUserId(userIdFromHeader),
 				requestId);

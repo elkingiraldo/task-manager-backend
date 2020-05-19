@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -28,9 +29,9 @@ import co.com.elkin.apps.taskmanagerapi.services.TaskServiceImpl;
  * @author egiraldo
  *
  */
-@CrossOrigin(origins={ "${cors.client.origin.baseUrl}" }, allowedHeaders="*")
+@CrossOrigin(origins = { "${cors.client.origin.baseUrl}" }, allowedHeaders = "*")
 @RestController
-@RequestMapping("/v1.0/tasks")
+@RequestMapping("/v1.0/tasks/{username}")
 public class TaskController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TaskController.class);
@@ -42,18 +43,21 @@ public class TaskController {
 	 * This method takes GET API request for handling and passing it to correct
 	 * service application layer for searching all current tasks for a specific user
 	 * 
-	 * @param request, HTTP request from user
-	 * @param locale,  language the client wants to use.
+	 * @param request,  HTTP request from user
+	 * @param username, user logged in
+	 * @param locale,   language the client wants to use.
 	 * @return {@link List<TaskDTO>}, a list of tasks found in DB
+	 * @throws APIServiceException when any validation fails getting tasks
 	 */
 	@GetMapping()
 	public ResponseEntity<List<TaskDTO>> tasks(final HttpServletRequest request,
-			@RequestHeader(value = "locale", required = false) final String locale) {
+			@PathVariable(value = "username") final String username,
+			@RequestHeader(value = "locale", required = false) final String locale) throws APIServiceException {
 
 		final String requestId = UUID.randomUUID().toString();
 		LOGGER.info("[TaskController][tasks][" + requestId + "] Started.");
 
-		final List<TaskDTO> tasks = taskService.retrieveTasks(request, requestId);
+		final List<TaskDTO> tasks = taskService.retrieveTasks(username, request, requestId);
 
 		LOGGER.info("[TaskController][tasks][" + requestId + "] Finished. Returned this number of task [" + tasks.size()
 				+ "]");
