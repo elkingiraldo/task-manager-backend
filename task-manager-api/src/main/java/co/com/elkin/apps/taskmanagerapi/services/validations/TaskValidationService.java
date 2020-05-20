@@ -22,6 +22,7 @@ public class TaskValidationService extends GeneralValidation {
 		LOGGER.info("[TaskValidationService][validateCreation][" + requestId + "] Started.");
 		validateObjectNotNull(task, TaskDTO.class.toString());
 		validateAttributeNotNull(task.getDescription(), DESCRIPTION);
+		validateEmptyString(task.getDescription(), DESCRIPTION);
 		validateAttributeNotNull(task.getEdc(), EDC);
 		validateEdc(task.getEdc());
 		LOGGER.info("[TaskValidationService][validateCreation][" + requestId + "] finished.");

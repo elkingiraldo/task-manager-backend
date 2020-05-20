@@ -17,6 +17,7 @@ import co.com.elkin.apps.taskmanagerapi.exception.APIServiceException;
 @Service
 public class GeneralValidation {
 
+	protected static final String EMPTY_STRING = "";
 	private static final Function<String, String> DTO_NAME = name -> "DTO: " + name;
 
 	/**
@@ -44,6 +45,19 @@ public class GeneralValidation {
 			throws APIServiceException {
 		if (Objects.isNull(atribute)) {
 			throw new APIServiceException(attributeName, APIServiceErrorCodes.GENERAL_ATTRIBUTE_REQUIRED_EXCEPTION);
+		}
+	}
+
+	/**
+	 * Validate if a string is empty
+	 * 
+	 * @param attribute,     String to validate if it's empty
+	 * @param attributeName, String with the name of the attribute
+	 * @throws APIServiceException
+	 */
+	protected void validateEmptyString(final String attribute, final String attributeName) throws APIServiceException {
+		if (EMPTY_STRING.equals(attribute.trim())) {
+			throw new APIServiceException(attributeName, APIServiceErrorCodes.TASK_DESCRIPTION_CANT_BE_EMPTY_EXCEPTION);
 		}
 	}
 
