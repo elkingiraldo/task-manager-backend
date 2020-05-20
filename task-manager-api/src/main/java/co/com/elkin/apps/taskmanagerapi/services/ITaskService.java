@@ -28,7 +28,7 @@ public interface ITaskService {
 	public List<TaskDTO> retrieveTasks(final String username, final HttpServletRequest request, final String requestId)
 			throws APIServiceException;
 
-	public TaskDTO createTask(final HttpServletRequest request, final TaskDTO task, final String requestId)
-			throws APIServiceException;
+	public TaskDTO createTask(final HttpServletRequest request, final TaskDTO task, final String username,
+			final String requestId) throws APIServiceException;
 
 }

@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,6 +29,7 @@ import co.com.elkin.apps.taskmanagerapi.services.validations.TaskValidationServi
 public class TaskServiceTest {
 
 	private static final String ANY_USER_NAME = "anyusername";
+	private static final String ANY_REQUEST_ID = "anyusername";
 
 	@InjectMocks
 	private TaskServiceImpl taskService;
@@ -93,18 +93,18 @@ public class TaskServiceTest {
 	}
 
 	@Test
-	@Ignore
 	public void shouldCreateTaskSuccessfully() throws APIServiceException {
 		doNothing().when(taskValidationService).validateUser(anyString(), anyString(), anyString());
 		doNothing().when(taskValidationService).validateCreation(any(), anyString());
-		doNothing().when(jwtUtil).getUserIdFromHeader(any(), anyString());
 		doNothing().when(taskValidationService).autocompleteCreation(any(), any(), anyString());
+		doNothing().when(taskValidationService).validateUser(anyString(), anyString(), anyString());
 
-		when(taskConverterService.toEntity(any(), anyString())).thenReturn(any());
-		when(taskRepository.save(any())).thenReturn(any());
+		when(jwtUtil.getUsernameFromHeader(any(), anyString())).thenReturn(ANY_USER_NAME);
+		when(taskConverterService.toEntity(any(), anyString())).thenReturn(task01);
+		when(taskRepository.save(any())).thenReturn(task01);
 		when(taskConverterService.toDTO(any())).thenReturn(taskDTO01);
 
-		final TaskDTO createdTask = taskService.createTask(any(), any(), anyString());
+		final TaskDTO createdTask = taskService.createTask(any(), any(), ANY_USER_NAME, ANY_REQUEST_ID);
 		assertEquals(taskDTO01, createdTask);
 	}
 

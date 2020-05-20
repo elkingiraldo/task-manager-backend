@@ -68,19 +68,22 @@ public class TaskController {
 	 * This method takes POST API request for handling and passing it to correct
 	 * service application layer for creating a new task.
 	 * 
-	 * @param task,   task to be created
-	 * @param locale, language the client wants to use.
+	 * @param request,  HTTP request from user
+	 * @param task,     task to be created
+	 * @param username, user logged in
+	 * @param locale,   language the client wants to use.
 	 * @return {@link TaskDTO}, task saved in DB.
 	 * @throws APIServiceException when something was wrong during the process
 	 */
 	@PostMapping()
 	public ResponseEntity<TaskDTO> create(final HttpServletRequest request, @RequestBody final TaskDTO task,
+			@PathVariable(value = "username") final String username,
 			@RequestHeader(value = "locale", required = false) final String locale) throws APIServiceException {
 
 		final String requestId = UUID.randomUUID().toString();
 		LOGGER.info("[TaskController][create][" + requestId + "] Started.");
 
-		final TaskDTO taskCreated = taskService.createTask(request, task, requestId);
+		final TaskDTO taskCreated = taskService.createTask(request, task, username, requestId);
 
 		LOGGER.info("[TaskController][create][" + requestId + "] Finished.");
 		return new ResponseEntity<TaskDTO>(taskCreated, HttpStatus.CREATED);

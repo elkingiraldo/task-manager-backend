@@ -64,14 +64,14 @@ public class TaskControllerTest {
 
 	@Test
 	public void onlyOneCallToTaskServicePost() throws APIServiceException {
-		taskController.create(any(), any(), anyString());
-		verify(taskService, times(1)).createTask(any(), any(), anyString());
+		taskController.create(any(), any(), anyString(), anyString());
+		verify(taskService, times(1)).createTask(any(), any(), anyString(), anyString());
 	}
 
 	@Test
 	public void dtoNotAffectedInCreateMethod() throws APIServiceException {
-		when(taskService.createTask(any(), any(), anyString())).thenReturn(task02);
-		final ResponseEntity<TaskDTO> response = taskController.create(any(), any(), anyString());
+		when(taskService.createTask(any(), any(), anyString(), anyString())).thenReturn(task02);
+		final ResponseEntity<TaskDTO> response = taskController.create(any(), any(), anyString(), anyString());
 		assertEquals(task02, response.getBody());
 	}
 

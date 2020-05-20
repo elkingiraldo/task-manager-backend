@@ -53,11 +53,12 @@ public class TaskServiceImpl implements ITaskService {
 	}
 
 	@Override
-	public TaskDTO createTask(final HttpServletRequest request, final TaskDTO task, final String requestId)
-			throws APIServiceException {
+	public TaskDTO createTask(final HttpServletRequest request, final TaskDTO task, final String username,
+			final String requestId) throws APIServiceException {
 
 		LOGGER.info("[TaskServiceImpl][createTask][" + requestId + "] Started.");
 
+		taskValidationService.validateUser(username, jwtUtil.getUsernameFromHeader(request, requestId), requestId);
 		taskValidationService.validateCreation(task, requestId);
 
 		final Integer userIdFromHeader = jwtUtil.getUserIdFromHeader(request, requestId);
