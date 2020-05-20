@@ -5,6 +5,9 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import co.com.elkin.apps.taskmanagerapi.constants.Constant;
 import co.com.elkin.apps.taskmanagerapi.enums.TaskStatus;
 
 public class TaskDTO implements Serializable {
@@ -15,8 +18,11 @@ public class TaskDTO implements Serializable {
 
 	@NotNull
 	private String description;
+
+	@JsonFormat(pattern = Constant.ESTIMATED_DATE_COMPLETION_JSON_FORMAT)
 	@NotNull
 	private Date edc;
+
 	private Integer userId;
 	private TaskStatus status;
 

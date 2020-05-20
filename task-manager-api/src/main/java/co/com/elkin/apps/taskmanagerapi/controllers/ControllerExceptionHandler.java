@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import co.com.elkin.apps.taskmanagerapi.constants.Constant;
 import co.com.elkin.apps.taskmanagerapi.exception.APIServiceErrorCodes;
 import co.com.elkin.apps.taskmanagerapi.exception.APIServiceException;
 import co.com.elkin.apps.taskmanagerapi.exception.ServiceExceptionWrapper;
@@ -30,7 +31,6 @@ import co.com.elkin.apps.taskmanagerapi.exception.ServiceExceptionWrapper;
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionHandler.class);
-	private static final String LOCALE_HEADER_NAME = "locale";
 
 	private static final Function<String, String> ERROR_MESSAGE = msg -> "Task Manager API service -> exception occurred"
 			+ msg;
@@ -87,7 +87,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private Locale getLocale(final WebRequest request) {
-		final String localeString = request.getHeader(LOCALE_HEADER_NAME);
+		final String localeString = request.getHeader(Constant.LOCALE_HEADER_NAME);
 
 		Locale locale = null;
 		if (localeString != null) {
