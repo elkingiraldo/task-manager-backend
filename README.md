@@ -21,6 +21,15 @@ The project run in port 8080 with spring security, then you only can access to t
 http://localhost:8080/swagger-ui.html
 http://localhost:8080/v2/api-docs
 ```
+### API responses
+
+
+| header  | value | description |
+| ------------- | ------------- | ------------- |
+| Accept  | application/json  | Default value  |
+| Accept  | application/xml  | If you want a xml response  |
+| locale  | en  | Default value  |
+| locale  | es  | If you want a response in spanish  |
 
 ### Users in DB
 
