@@ -76,7 +76,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(final WebSecurity webSecurity) throws Exception {
 		webSecurity.ignoring().antMatchers(HttpMethod.POST, TOKEN_URI).antMatchers(HttpMethod.OPTIONS, "/**").and()
-				   .ignoring().antMatchers(HttpMethod.GET, "/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html")
+				   .ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**")
 				   .and().ignoring().antMatchers("/h2-console/**/**");
 	}
 
