@@ -1,5 +1,5 @@
 # task-manager-backend
-Backend implementation for Task Manager app
+Backend implementation for Task Manager app. The frontend part is into [task-manager-frontend](https://github.com/elkingiraldo/task-manager-frontend)
 
 ## Compiling
 This is a Maven project and for compiling it you should do it with the Maven wrapper provided going into project root path (task-manager-api) and running the following command:
