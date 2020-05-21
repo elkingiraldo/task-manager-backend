@@ -15,4 +15,9 @@ The project is dockerized and it has a external Postgres Database dockerized too
 $ docker-compose up
 ```
 ## Generalities
-The project is running in port 8080
+The project run in port 8080 with spring security, then you only can access to the following paths in order to see Swagger Documentation:
+
+```
+http://localhost:8080/swagger-ui.html
+http://localhost:8080/v2/api-docs
+```
