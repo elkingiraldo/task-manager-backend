@@ -73,4 +73,14 @@ public class TaskServiceImpl implements ITaskService {
 		return taskDto;
 	}
 
+	@Override
+	public List<Task> getAllTask() {
+		return taskRepository.findAll();
+	}
+
+	@Override
+	public void saveAllTask(final List<Task> tasks) {
+		taskRepository.saveAll(tasks);
+	}
+
 }
