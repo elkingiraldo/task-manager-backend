@@ -21,6 +21,23 @@ The project run in port 8080 with spring security, then you only can access to t
 http://localhost:8080/swagger-ui.html
 http://localhost:8080/v2/api-docs
 ```
+### FOR DEBBUGING/TESTING
+If you want to test in local you need to start the container(task-manager-postgresql) of the DB created.
+```
+$ docker start task-manager-postgresql
+```
+Change two properties (spring.datasource.url and spring.flyway.url) into the application.propeties file.
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/taskmanagerdb
+spring.flyway.url=jdbc:postgresql://localhost:5432/taskmanagerdb
+```
+You can modify data too accessing into the DB with the following commands
+```
+$ docker exec -it task-manager-postgresql bash
+$ psql -U postgres;
+$ \c taskmanagerdb;
+```
+
 ### API responses
 
 
